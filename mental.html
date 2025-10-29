@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Buddy | StudyBuddy AI</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/mental.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-switch" class="theme-switch">
+        <label for="theme-switch" class="theme-label">
+            <i class="fas fa-sun"></i>
+            <i class="fas fa-moon"></i>
+            <span class="theme-ball"></span>
+        </label>
+    </div>
+
+    <div class="mental-container">
+        <!-- Floating Background Elements -->
+        <div class="floating-elements">
+            <div class="floating-circle circle-1"></div>
+            <div class="floating-circle circle-2"></div>
+            <div class="floating-circle circle-3"></div>
+            <div class="floating-heart heart-1">💖</div>
+            <div class="floating-heart heart-2">💖</div>
+        </div>
+
+        <header class="mental-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-content">
+                <div class="avatar-container">
+                    <img src="assets/avatars/therapist.png" alt="Buddy AI" class="avatar">
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="header-text">
+                    <h1>Mental Health Buddy</h1>
+                    <p class="subtitle">Your compassionate AI companion</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="mood-btn">
+                    <i class="fas fa-smile"></i>
+                </button>
+                <button class="action-btn" id="export-pdf">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="chat-container">
+            <div class="welcome-message" data-aos="fade-up">
+                <div class="message-bubble">
+                    <p>Hello there! 👋 I'm Buddy, your mental health companion. I'm here to listen without judgment and offer support whenever you need it. How are you feeling today?</p>
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+
+            <div class="mood-selector" id="mood-selector">
+                <h4>How are you feeling?</h4>
+                <div class="mood-options">
+                    <button class="mood-option" data-mood="happy">
+                        <div class="mood-icon">😊</div>
+                        <span>Happy</span>
+                    </button>
+                    <button class="mood-option" data-mood="sad">
+                        <div class="mood-icon">😔</div>
+                        <span>Sad</span>
+                    </button>
+                    <button class="mood-option" data-mood="stressed">
+                        <div class="mood-icon">😫</div>
+                        <span>Stressed</span>
+                    </button>
+                    <button class="mood-option" data-mood="anxious">
+                        <div class="mood-icon">😰</div>
+                        <span>Anxious</span>
+                    </button>
+                    <button class="mood-option" data-mood="motivation">
+                        <div class="mood-icon">💪</div>
+                        <span>Need Motivation</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action" data-prompt="I'm feeling stressed about exams">
+                    <i class="fas fa-book"></i> Exam Stress
+                </button>
+                <button class="quick-action" data-prompt="I need motivation to study">
+                    <i class="fas fa-bolt"></i> Motivation
+                </button>
+                <button class="quick-action" data-prompt="I'm feeling lonely">
+                    <i class="fas fa-heart"></i> Loneliness
+                </button>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="emoji-btn" id="emoji-btn">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <input type="text" id="user-input" placeholder="How are you feeling today?" autocomplete="off">
+                    <button class="voice-btn" id="voice-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-btn" id="send-btn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <div class="emoji-container" id="emoji-container">
+            <div class="emoji-category">
+                <h4>Feelings</h4>
+                <div class="emoji-list">
+                    <span>😊</span><span>😢</span><span>😠</span><span>😍</span><span>😔</span>
+                    <span>😌</span><span>😫</span><span>😰</span><span>😴</span><span>🤗</span>
+                </div>
+            </div>
+            <div class="emoji-category">
+                <h4>Activities</h4>
+                <div class="emoji-list">
+                    <span>🎓</span><span>📚</span><span>✏️</span><span>🏀</span><span>🎧</span>
+                    <span>🎮</span><span>🍕</span><span>☕</span><span>🛌</span><span>🧘</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breathing Exercise Modal -->
+    <div class="modal" id="breathing-modal">
+        <div class="modal-content">
+            <div class="breathing-animation">
+                <div class="circle-container">
+                    <div class="breathing-circle" id="breathing-circle">Breathe In</div>
+                </div>
+                <div class="breathing-instructions">
+                    <h3>Let's Breathe Together</h3>
+                    <p id="breathing-text">Breathe in deeply through your nose for 4 seconds</p>
+                    <button class="close-breathing" id="close-breathing">Finish Exercise</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (LOAD FIRST) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Other scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Your scripts (NO MODULE TYPE) -->
+    <script src="js/theme.js"></script>
+    <script src="js/mental.js"></script>
+    
+    <script>
+        // Initialize animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Breathing exercise animation
+        const breathingModal = document.getElementById('breathing-modal');
+        const breathingCircle = document.getElementById('breathing-circle');
+        const breathingText = document.getElementById('breathing-text');
+        const closeBreathing = document.getElementById('close-breathing');
+        
+        let breathingInterval;
+        let breathingPhase = 0;
+        const breathingPhases = [
+            { text: "Breathe in deeply through your nose for 4 seconds", duration: 4000 },
+            { text: "Hold your breath for 4 seconds", duration: 4000 },
+            { text: "Exhale slowly through your mouth for 6 seconds", duration: 6000 }
+        ];
+
+        function startBreathingExercise() {
+            breathingModal.style.display = 'flex';
+            breathingPhase = 0;
+            updateBreathingPhase();
+            
+            breathingInterval = setInterval(() => {
+                breathingPhase = (breathingPhase + 1) % breathingPhases.length;
+                updateBreathingPhase();
+            }, 14000); // Total cycle time
+        }
+
+        function updateBreathingPhase() {
+            const phase = breathingPhases[breathingPhase];
+            breathingText.textContent = phase.text;
+            
+            // Reset animation
+            breathingCircle.style.animation = 'none';
+            void breathingCircle.offsetWidth; // Trigger reflow
+            breathingCircle.style.animation = `breathe ${phase.duration/1000}s ease-in-out`;
+        }
+
+        closeBreathing.addEventListener('click', () => {
+            clearInterval(breathingInterval);
+            breathingModal.style.display = 'none';
+        });
+
+        // Mood selector toggle
+        const moodBtn = document.getElementById('mood-btn');
+        const moodSelector = document.getElementById('mood-selector');
+        
+        if (moodBtn && moodSelector) {
+            moodBtn.addEventListener('click', () => {
+                moodSelector.style.display = moodSelector.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // Mood selection
+        const moodOptions = document.querySelectorAll('.mood-option');
+        moodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const mood = this.getAttribute('data-mood');
+                const userInput = document.getElementById('user-input');
+                if (userInput) {
+                    userInput.value = `I'm feeling ${mood}`;
+                }
+                if (moodSelector) {
+                    moodSelector.style.display = 'none';
+                }
+                
+                // Add visual feedback
+                this.classList.add('selected');
+                setTimeout(() => {
+                    this.classList.remove('selected');
+                }, 1000);
+            });
+        });
+
+        // Simple test function to check if chat is working
+        function testChat() {
+            console.log('🧪 Testing chat functionality...');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            if (userInput && sendBtn) {
+                userInput.value = 'Hello, testing chat';
+                console.log('✅ Input and button found');
+                
+                // Simulate click
+                sendBtn.click();
+            } else {
+                console.error('❌ Input or button not found');
+            }
+        }
+
+        // Make test function available globally
+        window.testChat = testChat;
+
+        console.log('✅ Mental HTML loaded successfully');
+    </script>
+</body>
+</html>

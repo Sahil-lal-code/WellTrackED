@@ -1,0 +1,106 @@
+/* Academic Chat Theme */
+.academic-chat {
+    --primary-color: #6c63ff;
+    --secondary-color: #4d44db;
+    --accent-color: #00c9a7;
+    --text-color: #333;
+    --bg-color: #f9f9ff;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme.academic-chat {
+    --primary-color: #8a7cff;
+    --secondary-color: #6a5acd;
+    --accent-color: #00e5c9;
+    --text-color: #f0f0f0;
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Mental Health Chat Theme */
+.mental-chat {
+    --primary-color: #ff6584;
+    --secondary-color: #ff4d6d;
+    --accent-color: #ff9e7d;
+    --text-color: #333;
+    --bg-color: #fff5f7;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme.mental-chat {
+    --primary-color: #ff7b9c;
+    --secondary-color: #ff6b8b;
+    --accent-color: #ffb3a7;
+    --text-color: #f0f0f0;
+    --bg-color: #1a0f12;
+    --card-bg: #2a1a1f;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Background effects for mental health chat */
+.mental-chat .chat-messages {
+    position: relative;
+    overflow: hidden;
+}
+
+.mental-chat .chat-messages::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 101, 132, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 158, 125, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dark-theme.mental-chat .chat-messages::before {
+    background: radial-gradient(circle at 20% 30%, rgba(255, 101, 132, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 158, 125, 0.1) 0%, transparent 50%);
+}
+
+/* Floating hearts animation */
+@keyframes floatHearts {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.mental-chat .heart {
+    position: absolute;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    animation: floatHearts 8s linear forwards;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Mood-based background effects */
+.mental-chat[data-mood="stressed"] .chat-messages::before {
+    background: radial-gradient(circle at center, rgba(255, 101, 132, 0.1) 0%, transparent 70%);
+}
+
+.mental-chat[data-mood="anxious"] .chat-messages::before {
+    background: conic-gradient(from 45deg, rgba(255, 101, 132, 0.05), rgba(255, 158, 125, 0.05));
+}
+
+.mental-chat[data-mood="happy"] .chat-messages::before {
+    background: radial-gradient(circle at center, rgba(255, 214, 0, 0.05) 0%, transparent 70%);
+}
+
+.dark-theme.mental-chat[data-mood="happy"] .chat-messages::before {
+    background: radial-gradient(circle at center, rgba(255, 214, 0, 0.1) 0%, transparent 70%);
+}

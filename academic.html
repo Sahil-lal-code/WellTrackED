@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Helper | StudyBuddy AI</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/academic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="theme-toggle">
+        <input type="checkbox" id="theme-switch" class="theme-switch">
+        <label for="theme-switch" class="theme-label">
+            <i class="fas fa-sun"></i>
+            <i class="fas fa-moon"></i>
+            <span class="theme-ball"></span>
+        </label>
+    </div>
+
+    <div class="academic-container">
+        <!-- Floating Background Elements -->
+        <div class="floating-elements">
+            <div class="floating-circle circle-1"></div>
+            <div class="floating-circle circle-2"></div>
+            <div class="floating-circle circle-3"></div>
+            <div class="floating-icon icon-1"><i class="fas fa-square-root-alt"></i></div>
+            <div class="floating-icon icon-2"><i class="fas fa-atom"></i></div>
+        </div>
+
+        <header class="academic-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-content">
+                <div class="avatar-container">
+                    <img src="assets/avatars/professor.png" alt="Professor AI" class="avatar">
+                    <div class="status-indicator"></div>
+                </div>
+                <div class="header-text">
+                    <h1>Academic Helper</h1>
+                    <p class="subtitle">Your personal AI tutor</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="subject-btn">
+                    <i class="fas fa-book"></i>
+                </button>
+                <button class="action-btn" id="export-pdf">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="chat-container">
+            <div class="welcome-message" data-aos="fade-up">
+                <div class="message-bubble">
+                    <p>Hello! 👋 I'm Professor AI, your academic assistant. I can help you with Math, Physics, Computer Science, and more! What would you like to learn today?</p>
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+
+            <div class="subject-selector" id="subject-selector">
+                <h4>Select Subject</h4>
+                <div class="subject-options">
+                    <button class="subject-option" data-subject="math">
+                        <div class="subject-icon"><i class="fas fa-square-root-alt"></i></div>
+                        <span>Mathematics</span>
+                    </button>
+                    <button class="subject-option" data-subject="physics">
+                        <div class="subject-icon"><i class="fas fa-atom"></i></div>
+                        <span>Physics</span>
+                    </button>
+                    <button class="subject-option" data-subject="computer-science">
+                        <div class="subject-icon"><i class="fas fa-laptop-code"></i></div>
+                        <span>Computer Science</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action" data-prompt="Explain Pythagoras theorem">
+                    <i class="fas fa-shapes"></i> Pythagoras
+                </button>
+                <button class="quick-action" data-prompt="What is Newton's second law?">
+                    <i class="fas fa-meteor"></i> Newton's Law
+                </button>
+                <button class="quick-action" data-prompt="Explain binary search algorithm">
+                    <i class="fas fa-code"></i> Binary Search
+                </button>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="file-btn" id="file-btn">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="file" id="file-input" accept="image/*,.pdf" style="display: none;">
+                    <input type="text" id="user-input" placeholder="Ask your academic question..." autocomplete="off">
+                    <button class="voice-btn" id="voice-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-btn" id="send-btn" type="button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="file-preview" id="file-preview"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDK (LOAD FIRST) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Other scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Your scripts (NO MODULE TYPE) -->
+    <script src="js/academic.js"></script>
+    <script src="js/theme.js"></script>
+    
+    <script>
+        // Initialize animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Subject selector toggle
+        const subjectBtn = document.getElementById('subject-btn');
+        const subjectSelector = document.getElementById('subject-selector');
+        
+        if (subjectBtn && subjectSelector) {
+            subjectBtn.addEventListener('click', () => {
+                subjectSelector.style.display = subjectSelector.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // File upload handling
+        const fileBtn = document.getElementById('file-btn');
+        const fileInput = document.getElementById('file-input');
+        const filePreview = document.getElementById('file-preview');
+        
+        if (fileBtn && fileInput) {
+            fileBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+        
+        if (fileInput && filePreview) {
+            fileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) return;
+                
+                // Check file type
+                if (!file.type.match('image.*') && !file.type.match('application/pdf')) {
+                    alert('Please upload an image (JPG, PNG) or PDF file.');
+                    this.value = '';
+                    return;
+                }
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size should be less than 5MB.');
+                    this.value = '';
+                    return;
+                }
+                
+                // Display preview
+                filePreview.innerHTML = '';
+                
+                if (file.type.match('image.*')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        filePreview.innerHTML = `
+                            <div class="preview-item">
+                                <img src="${e.target.result}" alt="Preview">
+                                <div class="preview-info">
+                                    <span>${file.name}</span>
+                                    <button class="remove-file"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Add remove file button event
+                        filePreview.querySelector('.remove-file').addEventListener('click', function() {
+                            fileInput.value = '';
+                            filePreview.innerHTML = '';
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.type.match('application/pdf')) {
+                    filePreview.innerHTML = `
+                        <div class="preview-item">
+                            <i class="fas fa-file-pdf pdf-icon"></i>
+                            <div class="preview-info">
+                                <span>${file.name}</span>
+                                <button class="remove-file"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add remove file button event
+                    filePreview.querySelector('.remove-file').addEventListener('click', function() {
+                        fileInput.value = '';
+                        filePreview.innerHTML = '';
+                    });
+                }
+            });
+        }
+
+        // Quick action buttons
+        document.querySelectorAll('.quick-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const prompt = this.getAttribute('data-prompt');
+                const userInput = document.getElementById('user-input');
+                if (userInput) {
+                    userInput.value = prompt;
+                    // Trigger the send button click
+                    const sendBtn = document.getElementById('send-btn');
+                    if (sendBtn) {
+                        sendBtn.click();
+                    }
+                }
+            });
+        });
+
+        // Simple test function
+        window.testAcademic = function() {
+            console.log('🧪 Testing academic chat...');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            
+            if (userInput && sendBtn) {
+                userInput.value = 'Hello, testing academic chat';
+                console.log('✅ Input and button found');
+                sendBtn.click();
+            } else {
+                console.error('❌ Input or button not found');
+            }
+        };
+
+        console.log('✅ Academic HTML loaded successfully');
+    </script>
+
+    <!-- Firebase Auth Check -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRbHMH-xH2MpAaGfeqOmYFdnibe4SuSLo",
+            authDomain: "welltracked-708a4.firebaseapp.com",
+            projectId: "welltracked-708a4",
+            storageBucket: "welltracked-708a4.firebasestorage.app",
+            messagingSenderId: "164432154571",
+            appId: "1:164432154571:web:59b85e896d2da317bcf04e",
+            measurementId: "G-K95WMYP4GC"
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = 'auth.html';
+            }
+        });
+    </script>
+</body>
+</html>
